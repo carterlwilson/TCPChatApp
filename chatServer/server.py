@@ -9,7 +9,7 @@ from model.connection import *
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setblocking(0)
 
-server_address = ('localhost', 1025)
+server_address = ('0.0.0.0', 1025)
 print('starting up on %s port %s' % server_address)
 server.bind(server_address)
 

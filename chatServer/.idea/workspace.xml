@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="55f70f9e-1dbc-4a8e-94f2-b03b60d5023e" name="Default Changelist" comment="" />
+    <list default="true" id="55f70f9e-1dbc-4a8e-94f2-b03b60d5023e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../chatClient/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/../chatClient/client.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chatClient/clientUtils.py" beforeDir="false" afterPath="$PROJECT_DIR$/../chatClient/clientUtils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chatClient/client_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../chatClient/client_main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,7 +26,7 @@
   <component name="ProjectId" id="1TzjqvolIVA1syTzBoEAiP2rlFP" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../chatClient" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -86,7 +91,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

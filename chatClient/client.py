@@ -13,7 +13,7 @@ class chatClient:
         self.port = port
         self.events = queue.Queue()
         self.sock = None
-        self.channel = 'all'
+        self.rooms = []
         self.nickname = 'carter'
 
     def connect_server(self):

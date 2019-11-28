@@ -27,47 +27,40 @@ class MenuClass:
 
             if message['command'] == '/nicknameSet':
                 self.nickname = message['nickname']
-                print(message['message'])
-
-            if message['command'] == '/nicknameFail':
-                print(message['message'])
-
-            if message['command'] == '/listRooms':
-                print(message['message'])
 
             if message['command'] == '/leaveRoom':
                 if message['room'] in self.rooms:
                     self.rooms.remove(message['room'])
 
     def parse_menu_choice(self, user_input, outbound_message_queue, nickname):
-        input_array = user_input.split(' ', 1)
+        input_array = user_input.split('/')
 
-        if input_array[0] == '/quit':
+        if input_array[0] == 'quit':
             sys.exit()
 
-        elif input_array[0] == '/broadcast':
-            utils.broadcast_message(self.nickname, self.rooms, input_array[1], outbound_message_queue)
+        elif input_array[0] == 'broadcast':
+            utils.broadcast_message(self.nickname, input_array[1], input_array[2], outbound_message_queue)
 
-        elif input_array[0] == '/join':
+        elif input_array[0] == 'join':
             message = utils.build_message('/join', nickname, input_array[1], '')
             outbound_message_queue.put(message)
 
-        elif input_array[0] == '/direct':
+        elif input_array[0] == 'direct':
             user = input_array[1]
             print('What message do you want to send?')
             message_input = input()
             utils.send_direct_message(self.nickname, user, message_input, outbound_message_queue)
 
-        elif input_array[0] == '/listRooms':
+        elif input_array[0] == 'listRooms':
             utils.list_rooms(self.nickname, outbound_message_queue)
 
-        elif input_array[0] == '/leave':
+        elif input_array[0] == 'leave':
             utils.leave_room('/leaveRoom', self.nickname, input_array[1], outbound_message_queue)
 
-        elif input_array[0] == '/members':
+        elif input_array[0] == 'members':
             utils.list_room_members(self.nickname, input_array[1], outbound_message_queue)
 
-        elif input_array[0] == '/close':
+        elif input_array[0] == 'close':
             utils.close_connection(self.nickname, outbound_message_queue)
 
         else:
@@ -84,7 +77,8 @@ class MenuClass:
         menu.print_menu()
         while x:
             menu_choice = input()
-            # This is used to change variables in this thread **IT DOES NOT PRINT MSGS FROM SERVER***
+            # This is used to change variables in this thread **IT DOES NOT PRINT MSGS FROM SERVER***,
+            # it is a workaround for sharing variables between the two threads like nickname and rooms,
             self.parse_inbound_messages(inbound_message_queue, self.rooms)
             self.parse_menu_choice(menu_choice, outbound_message_queue, self.nickname)
 

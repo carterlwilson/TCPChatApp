@@ -2,7 +2,6 @@ def build_message(command, nickname, channel, message_text):
     message = {'command': command, 'nickname': nickname, 'channel': channel, 'message': message_text}
     return message
 
-
 def broadcast_message(nickname, channel, message_text, outbound_message_queue):
     message = build_message('/broadcast', nickname, channel, message_text)
     outbound_message_queue.put(message)
