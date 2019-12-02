@@ -12,8 +12,14 @@ class MenuClass:
         self.rooms = []
 
     def print_menu(self):
-        print("send broadcast - /broadcast <message>\n" +
-              'join channel = /join <channel>')
+        print('\n\n\nCommands:\n'
+              'send broadcast - broadcast/<room>/<message>\n' +
+              'join channel = join/<channel>\n' + 
+              'list all rooms = listRooms\n' + 
+              'leave a room = leave/<room>\n' + 
+              'show members of a room = members/<room>\n' +
+              'send direct message to user = direct/<username>/<message>\n' 
+              'close connection with server = close\n\n\n')
 
     def add_outbound_message(self, message, outbound_message_queue):
         outbound_message_queue.put(message)
@@ -33,7 +39,7 @@ class MenuClass:
                     self.rooms.remove(message['room'])
 
     def parse_menu_choice(self, user_input, outbound_message_queue, nickname):
-        input_array = user_input.split('/')
+        input_array = user_input.split('/', 2)
 
         if input_array[0] == 'quit':
             sys.exit()
@@ -47,8 +53,7 @@ class MenuClass:
 
         elif input_array[0] == 'direct':
             user = input_array[1]
-            print('What message do you want to send?')
-            message_input = input()
+            message_input = input_array[2]
             utils.send_direct_message(self.nickname, user, message_input, outbound_message_queue)
 
         elif input_array[0] == 'listRooms':
@@ -78,13 +83,14 @@ class MenuClass:
         while x:
             menu_choice = input()
             # This is used to change variables in this thread **IT DOES NOT PRINT MSGS FROM SERVER***,
-            # it is a workaround for sharing variables between the two threads like nickname and rooms,
+            # it is a workaround for sharing variables between the two threads like nickname and rooms
             self.parse_inbound_messages(inbound_message_queue, self.rooms)
             self.parse_menu_choice(menu_choice, outbound_message_queue, self.nickname)
 
 
 def main():
-    host = '34.70.217.186'
+    host = 'localhost'
+    #host = '34.70.217.186'  #ip address for cloud hosted server
     port = 1025
     outbound_message_queue = queue.Queue()
     inbound_message_queue = queue.Queue()

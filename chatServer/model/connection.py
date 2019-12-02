@@ -1,5 +1,11 @@
-import serverUtils as utils
 
+def buildMessage(command, nickname, channel, messageText):
+    message = {}
+    message['command'] = command
+    message['nickname'] = nickname
+    message['channel'] = channel
+    message['message'] = messageText
+    return message
 
 def build_new_connection(connection, client_address, socketId):
     socket_data = {'nickname': '', 'socketConnection': connection, 'address': client_address, 'messages': [],
@@ -10,7 +16,6 @@ def build_new_connection(connection, client_address, socketId):
 
 def broadcast_message(request, sockets, message_queues, outputs):
     rooms = request['channel']
-    # socketId = request['socketId']
 
     for key, socketOut in sockets.items():
         socket_id = socketOut['socketId']
@@ -36,7 +41,7 @@ def join_room(request, sockets, socket, channels, message_queues):
 
     response_text = 'successfully joined room' + room
 
-    response = utils.buildMessage('/joinSuccess', request['nickname'], room, response_text)
+    response = buildMessage('/joinSuccess', request['nickname'], room, response_text)
     message_queues[socket_id].put(response)
 
     return sockets
@@ -51,7 +56,7 @@ def leave_room(request, sockets, socket, rooms, message_queues):
     else:
         response_text = 'You were never in that room'
 
-    response = utils.buildMessage('/leaveRoom', request['nickname'], room, response_text)
+    response = buildMessage('/leaveRoom', request['nickname'], room, response_text)
     message_queues[socket_id].put(response)
 
 
@@ -63,7 +68,7 @@ def list_rooms(request, rooms, socket, message_queues):
 
     else:
         response_text = 'No Rooms created yet'
-    message = utils.buildMessage(request['command'], request['nickname'], request['channel'], response_text)
+    message = buildMessage(request['command'], request['nickname'], request['channel'], response_text)
     message_queues[socket.fileno()].put(message)
 
 
@@ -81,7 +86,7 @@ def list_room_members(request, sockets, s, rooms, message_queues):
     else:
         response_message = 'That room does not exist!'
 
-    message = utils.buildMessage('/roomMembers', request['nickname'], room, response_message)
+    message = buildMessage('/roomMembers', request['nickname'], room, response_message)
     message_queues[socket_id].put(message)
 
 
@@ -95,10 +100,6 @@ def set_nickname(socket, request, sockets, message_queues):
 
     message_queues[socket_id].put(message)
     return sockets
-    # for key in sockets:
-    #         if (sockets[key]['socketId'] == socketId):
-    #                 sockets[key]['messages'].append(message)
-
 
 def send_direct_message(request, sockets, s, message_queues, outputs):
     destination = request['channel']
@@ -108,17 +109,17 @@ def send_direct_message(request, sockets, s, message_queues, outputs):
     for key, socket in sockets.items():
 
         if socket['nickname'] == destination:
-            message_queues[socket['socketId']].put(utils.buildMessage('/direct', request['nickname'], destination,
+            message_queues[socket['socketId']].put(utils.buildMessage('/direct', request['nickname'], 'direct',
                                                                       request['message']))
             outputs.append(socket['socketConnection'])
             user_present = True
 
     if not user_present:
         message = 'No user found with that nickname'
-        message_queues[s.fileno()].put(utils.buildMessage('/direct', request['nickname'], destination,
+        message_queues[s.fileno()].put(buildMessage('/direct', request['nickname'], destination,
                                                           message))
 
 
 def say_thanks(request, s, message_queues):
     message = 'Thanks for chatting ' + request['nickname'] + '!'
-    message_queues[s.fileno()].put(utils.buildMessage('/close', request['nickname'], 'n/a/', message))
+    message_queues[s.fileno()].put(buildMessage('/close', request['nickname'], 'n/a/', message))

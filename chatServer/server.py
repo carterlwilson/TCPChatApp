@@ -32,7 +32,6 @@ while inputs:
             if newConnection:
                 newConnection.setblocking(0)
                 inputs.append(newConnection)
-                #outputs.append(newConnection)
 
                 socketDataObj = build_new_connection(newConnection, client_address, newConnection.fileno())
 
@@ -42,18 +41,10 @@ while inputs:
 
                 print('connected to client')
 
-                # successMessage = {}
-                # successMessage['command'] = '/message'
-                # successMessage['message'] = 'successfully connected to server!'
-
-                # sendResponse(successMessage, message_queues[newConnection.fileno()])
-
         else:
             data = s.recv(1024)
             if data:
                 request = pickle.loads(data)
-                # print('received "%s" from %s' % (data, s.getpeername()))
-                # message_queues[s].put(data)
                 print('received message\n')
                 if request['command'] == '/nick':
                     print('received /nick request')
@@ -106,7 +97,6 @@ while inputs:
             if s in outputs:
                 outputs.remove(s)
         else:
-            # print('sending "%s" to %s' % (next_msg, s.getpeername()))
             if next_msg:
                 serialized_msg = pickle.dumps(next_msg)
                 s.sendall(serialized_msg)

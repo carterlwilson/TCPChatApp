@@ -71,10 +71,25 @@ class chatClient:
                         outputs.remove(self.sock)
                         self.sock.close()
                         print('connection closed')
-                    if message['command'] == '/joinSuccess':
-                        inboundMessageQueue.put(message)
-                    if message['message']:
+                    elif message['command'] == 'nicknameSet':
                         print(message['message'])
+                    elif message['command'] == '/joinSuccess':
+                        inboundMessageQueue.put(message)
+                        print(message['message'])
+                    elif message['message']:
+                        message = utils.format_message(message)
+                        print(message['message'])
+                    
+                else:
+                # Interpret empty result as closed connection
+                # Stop listening for input on the connection
+                    if self.sock in outputs:
+                        outputs.remove(self.sock)
+                    inputs.remove(self.sock)
+                    # Remove message queue
+                    self.sock.close()
+                    print('Connection has been broken on the server end and closed.')
+
 
             if self.sock in writable:
                 if not outboundMessageQueue.empty():

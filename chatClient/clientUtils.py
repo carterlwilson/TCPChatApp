@@ -35,3 +35,10 @@ def list_room_members(nickname, room, outbound_message_queue):
 def close_connection(nickname, outbound_message_queue):
     message = build_message('/close', nickname, 'n/a', 'n/a')
     outbound_message_queue.put(message)
+
+def format_message(message):
+    if message['nickname']:
+        message['message'] = message['nickname'] + ': ' + message['message']
+    if message['channel']:
+        message['message'] = '[' + message['channel'] + '] ' + message['message']
+    return message
