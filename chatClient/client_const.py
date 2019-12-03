@@ -1,0 +1,7 @@
+BROADCAST_CMD = "/broadcast"
+JOIN_CMD = "/join"
+DIR_MSG_COMD = "/direct"
+LIST_ROOMS_CMD = "/listRooms"
+LEAVE_ROOM_CMD = "/leaveRoom"
+LIST_ROOM_MEMBER_CMD = "/roomMembers"
+CLOSE_CONN_CMD = "/close"

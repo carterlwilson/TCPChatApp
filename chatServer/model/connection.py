@@ -56,7 +56,7 @@ def leave_room(request, sockets, socket, rooms, message_queues):
     else:
         response_text = 'You were never in that room'
 
-    response = buildMessage('/leaveRoom', request['nickname'], room, response_text)
+    response = buildMessage(const.LEAVE_ROOM_CMD, request['nickname'], room, response_text)
     message_queues[socket_id].put(response)
 
 
@@ -86,7 +86,7 @@ def list_room_members(request, sockets, s, rooms, message_queues):
     else:
         response_message = 'That room does not exist!'
 
-    message = buildMessage('/roomMembers', request['nickname'], room, response_message)
+    message = buildMessage(const.LIST_ROOM_MEMBER_CMD, request['nickname'], room, response_message)
     message_queues[socket_id].put(message)
 
 
@@ -109,17 +109,17 @@ def send_direct_message(request, sockets, s, message_queues, outputs):
     for key, socket in sockets.items():
 
         if socket['nickname'] == destination:
-            message_queues[socket['socketId']].put(utils.buildMessage('/direct', request['nickname'], 'direct',
+            message_queues[socket['socketId']].put(utils.buildMessage(const.DIR_MSG_COMD, request['nickname'], 'direct',
                                                                       request['message']))
             outputs.append(socket['socketConnection'])
             user_present = True
 
     if not user_present:
         message = 'No user found with that nickname'
-        message_queues[s.fileno()].put(buildMessage('/direct', request['nickname'], destination,
+        message_queues[s.fileno()].put(buildMessage(const.DIR_MSG_COMD, request['nickname'], destination,
                                                           message))
 
 
 def say_thanks(request, s, message_queues):
     message = 'Thanks for chatting ' + request['nickname'] + '!'
-    message_queues[s.fileno()].put(buildMessage('/close', request['nickname'], 'n/a/', message))
+    message_queues[s.fileno()].put(buildMessage(const.CLOSE_CONN_CMD, request['nickname'], 'n/a/', message))

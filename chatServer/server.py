@@ -5,6 +5,7 @@ import queue
 import json
 import pickle
 from model.connection import *
+import server_const as const
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setblocking(0)
@@ -50,25 +51,25 @@ while inputs:
                     print('received /nick request')
                     sockets = set_nickname(s, request, sockets, messageQueues)
 
-                elif request['command'] == '/broadcast':
+                elif request['command'] == const.BROADCAST_CMD:
                     broadcast_message(request, sockets, messageQueues, outputs)
 
-                elif request['command'] == '/join':
+                elif request['command'] == const.JOIN_CMD:
                     sockets = join_room(request, sockets, s, rooms, messageQueues)
 
-                elif request['command'] == '/direct':
+                elif request['command'] == const.JOIN_CMD:
                     send_direct_message(request, sockets, s, messageQueues, outputs)
 
-                elif request['command'] == '/listRooms':
+                elif request['command'] == const.LIST_ROOMS_CMD:
                     list_rooms(request, rooms, s, messageQueues)
 
-                elif request['command'] == '/leaveRoom':
+                elif request['command'] == const.LEAVE_ROOM_CMD:
                     leave_room(request, sockets, s, rooms, messageQueues)
 
-                elif request['command'] == '/roomMembers':
+                elif request['command'] == const.LIST_ROOM_MEMBER_CMD:
                     list_room_members(request, sockets, s, rooms, messageQueues)
 
-                elif request['command'] == '/close':
+                elif request['command'] == const.CLOSE_CONN_CMD:
                     say_thanks(request, s, messageQueues)
 
                 if s not in outputs:

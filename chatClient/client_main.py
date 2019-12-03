@@ -3,6 +3,7 @@ import sys
 import client
 import queue
 import clientUtils as utils
+import client_const as const
 
 
 class MenuClass:
@@ -34,7 +35,7 @@ class MenuClass:
             if message['command'] == '/nicknameSet':
                 self.nickname = message['nickname']
 
-            if message['command'] == '/leaveRoom':
+            if message['command'] == const.LEAVE_ROOM_CMD:
                 if message['room'] in self.rooms:
                     self.rooms.remove(message['room'])
 
@@ -48,7 +49,7 @@ class MenuClass:
             utils.broadcast_message(self.nickname, input_array[1], input_array[2], outbound_message_queue)
 
         elif input_array[0] == 'join':
-            message = utils.build_message('/join', nickname, input_array[1], '')
+            message = utils.build_message(const.JOIN_CMD, nickname, input_array[1], '')
             outbound_message_queue.put(message)
 
         elif input_array[0] == 'direct':
@@ -60,7 +61,7 @@ class MenuClass:
             utils.list_rooms(self.nickname, outbound_message_queue)
 
         elif input_array[0] == 'leave':
-            utils.leave_room('/leaveRoom', self.nickname, input_array[1], outbound_message_queue)
+            utils.leave_room(const.LEAVE_ROOM_CMD, self.nickname, input_array[1], outbound_message_queue)
 
         elif input_array[0] == 'members':
             utils.list_room_members(self.nickname, input_array[1], outbound_message_queue)

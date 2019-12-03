@@ -66,7 +66,7 @@ class chatClient:
                 message_bytes = self.sock.recv(1024)
                 if message_bytes:
                     message = pickle.loads(message_bytes)
-                    if message['command'] == '/close':
+                    if message['command'] == const.CLOSE_CONN_CMD:
                         inputs.remove(self.sock)
                         outputs.remove(self.sock)
                         self.sock.close()
