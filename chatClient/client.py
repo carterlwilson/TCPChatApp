@@ -4,6 +4,8 @@ import pickle
 import select
 import queue
 import clientUtils as utils
+import client_const as const
+import json
 
 
 class chatClient:
@@ -34,7 +36,7 @@ class chatClient:
             messageQueue.put(message)
 
     def send_nick(self, data, messageQueue):
-        message = {'nickname': data, 'command': '/nick', 'channel': self.channel}
+        message = {'nickname': data, 'command': const.NICK_CMD, 'channel': self.channel}
         messageQueue.put(message)
         # try:
         #     self.sock.send(pickle.dumps(message))
@@ -66,14 +68,16 @@ class chatClient:
                 message_bytes = self.sock.recv(1024)
                 if message_bytes:
                     message = pickle.loads(message_bytes)
+                    message = json.loads(message)
                     if message['command'] == const.CLOSE_CONN_CMD:
                         inputs.remove(self.sock)
                         outputs.remove(self.sock)
                         self.sock.close()
                         print('connection closed')
-                    elif message['command'] == 'nicknameSet':
+                    elif message['command'] == const.NICK_SET_CMD:
                         print(message['message'])
-                    elif message['command'] == '/joinSuccess':
+                        inboundMessageQueue.put(message)
+                    elif message['command'] == const.JOIN_SUCCESS_CMD:
                         inboundMessageQueue.put(message)
                         print(message['message'])
                     elif message['message']:

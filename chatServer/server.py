@@ -4,7 +4,7 @@ import sys
 import queue
 import json
 import pickle
-from model.connection import *
+from connection import *
 import server_const as const
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -43,11 +43,27 @@ while inputs:
                 print('connected to client')
 
         else:
-            data = s.recv(1024)
+            try:
+                data = s.recv(1024)
+            except socket.error:
+                print("A client has crashed and lost connection.")
+                messageQueues.pop(s.fileno())
+                sockets.pop(s.fileno())
+                if s in readable:
+                    readable.remove(s)
+                if s in writable:
+                    writable.remove(s)
+                if s in inputs:
+                    inputs.remove(s)
+                if s in outputs:
+                    outputs.remove(s)
+                print('closing connection')
+                s.close()
+                break
             if data:
                 request = pickle.loads(data)
                 print('received message\n')
-                if request['command'] == '/nick':
+                if request['command'] == const.NICK_CMD:
                     print('received /nick request')
                     sockets = set_nickname(s, request, sockets, messageQueues)
 
@@ -57,7 +73,7 @@ while inputs:
                 elif request['command'] == const.JOIN_CMD:
                     sockets = join_room(request, sockets, s, rooms, messageQueues)
 
-                elif request['command'] == const.JOIN_CMD:
+                elif request['command'] == const.DIR_MSG_COMD:
                     send_direct_message(request, sockets, s, messageQueues, outputs)
 
                 elif request['command'] == const.LIST_ROOMS_CMD:
@@ -80,7 +96,8 @@ while inputs:
                 # Stop listening for input on the connection
                 if s in outputs:
                     outputs.remove(s)
-                inputs.remove(s)
+                if s in inputs:
+                    inputs.remove(s)
                 # Remove message queue
                 messageQueues.pop(s.fileno())
                 sockets.pop(s.fileno())
@@ -99,7 +116,8 @@ while inputs:
                 outputs.remove(s)
         else:
             if next_msg:
-                serialized_msg = pickle.dumps(next_msg)
+                jsonMsg = json.dumps(next_msg)
+                serialized_msg = pickle.dumps(json.dumps(next_msg))
                 s.sendall(serialized_msg)
 
     # Handle "exceptional conditions"
@@ -113,3 +131,5 @@ while inputs:
 
         # Remove message queue
         del messageQueues[s]
+
+

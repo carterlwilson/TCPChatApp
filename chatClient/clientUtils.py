@@ -14,8 +14,8 @@ def send_direct_message(nickname, destination_user, message, outbound_message_qu
     outbound_message_queue.put(message)
 
 
-def send_nick(data, message_queue, channel):
-    message = {'nickname': data, 'command': '/nick', 'channel': channel}
+def send_nick(data, message_queue):
+    message = {'nickname': data, 'command': const.NICK_CMD, 'channel': '', 'message': ''}
     message_queue.put(message)
 
 
