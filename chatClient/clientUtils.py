@@ -20,22 +20,22 @@ def send_nick(data, outbound_message_queue):
 
 
 def list_rooms(nickname, outbound_message_queue):
-    message = build_message(const.LIST_ROOMS_CMD, nickname, 'n/a', 'n/a')
+    message = build_message(const.LIST_ROOMS_CMD, nickname, '', '')
     outbound_message_queue.put(message)
 
 
 def leave_room(command, nickname, channel, outbound_message_queue):
-    message = build_message(const.LEAVE_ROOM_CMD, nickname, channel, 'n/a')
+    message = build_message(const.LEAVE_ROOM_CMD, nickname, channel, '')
     outbound_message_queue.put(message)
 
 
 def list_room_members(nickname, room, outbound_message_queue):
-    message = build_message(const.LIST_ROOM_MEMBER_CMD, nickname, room, 'n/a')
+    message = build_message(const.LIST_ROOM_MEMBER_CMD, nickname, room, '')
     outbound_message_queue.put(message)
 
 
 def close_connection(nickname, outbound_message_queue):
-    message = build_message(const.CLOSE_CONN_CMD, nickname, 'n/a', 'n/a')
+    message = build_message(const.CLOSE_CONN_CMD, nickname, '', '')
     outbound_message_queue.put(message)
 
 def format_message(message):

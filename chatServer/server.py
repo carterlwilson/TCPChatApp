@@ -46,6 +46,7 @@ try:
                     print('connected to client')
 
             else:
+                #handles client crash
                 try:
                     data = s.recv(1024)
                 except socket.error:
@@ -98,13 +99,9 @@ try:
                     print('closing', client_address, 'after reading no data')
                     # Stop listening for input on the connection
                     sockets.pop(s.fileno())
-                    close_connection(s, messageQueues, inputs, outputs)
-                    # if s in outputs:
-                    #     outputs.remove(s)
-                    # if s in inputs:
-                    #     inputs.remove(s)
-                    # Remove message queue       
-
+                    close_connection(s, messageQueues, inputs, outputs)     
+        
+        #handle sockets ready to be written to
         for s in writable:
             try:
                 next_msg = ''
@@ -131,7 +128,7 @@ try:
             s.close()
 
             # Remove message queue
-            del messageQueues[s]
+            del messageQueues[s.fileno()]
 
 except KeyboardInterrupt:
     for key, socket in sockets.items():

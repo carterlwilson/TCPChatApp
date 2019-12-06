@@ -40,10 +40,6 @@ class chatClient:
     def send_nick(self, data, messageQueue):
         message = {'nickname': data, 'command': const.NICK_CMD, 'channel': self.rooms}
         messageQueue.put(message)
-        # try:
-        #     self.sock.send(pickle.dumps(message))
-        # except:
-        #     print('could not send nick message')
 
     def run_client(self, outboundMessageQueue, inboundMessageQueue, eventMessageQueue):
 
@@ -52,8 +48,6 @@ class chatClient:
         except:
             print('Could not connect to chat server')
             sys.exit(1)
-
-        # self.sendNick(self.nickname,outboundMessageQueue)
 
         inputs = [self.sock]
         outputs = [self.sock]
