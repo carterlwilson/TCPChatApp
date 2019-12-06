@@ -32,13 +32,16 @@ class MenuClass:
 
     def print_menu(self):
         print('\n\n\nCommands:\n'
-              'send broadcast - broadcast/<room>/<message>\n' +
+              'send broadcast = broadcast/<room>/<message>\n' +
               'join channel = join/<channel>\n' + 
               'list all rooms = listRooms\n' + 
               'leave a room = leave/<room>\n' + 
               'show members of a room = members/<room>\n' +
               'send direct message to user = direct/<username>/<message>\n' 
-              'close connection with server = close\n\n\n')
+              'close connection with server = close\n' + 
+              're-connect to server = connect/<nickname>\n' +
+              'set nickname = nick/<nickname>\n' + 
+              'quit program = quit\n\n\n')
 
     def add_outbound_message(self, message, outbound_message_queue):
         outbound_message_queue.put(message)
@@ -116,8 +119,8 @@ class MenuClass:
 
 
 def main():
-    host = 'localhost'
-    #host = '35.225.202.2'  #ip address for cloud hosted server
+    #host = 'localhost'
+    host = '35.225.202.2'  #ip address for cloud hosted server
     port = 1025
     outbound_message_queue = queue.Queue()
     inbound_message_queue = queue.Queue()
