@@ -114,8 +114,8 @@ class MenuClass:
 
 
 def main():
-    #host = 'localhost'
-    host = '35.225.202.2'  #ip address for cloud hosted server
+    host = 'localhost'
+    #host = '35.225.202.2'  #ip address for cloud hosted server
     port = 1025
     outbound_message_queue = queue.Queue()
     inbound_message_queue = queue.Queue()

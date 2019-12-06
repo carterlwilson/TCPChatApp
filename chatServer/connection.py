@@ -113,11 +113,12 @@ def set_nickname(socket, request, sockets, message_queues):
 
     for key, s in sockets.items():
         if s['nickname'] == nickname:
-            message = {'nickname': nickname, 'command': const.NICK_FAIL_CMD, 'message': 'Nickname ' + nickname+  'is taken.'}
+            message = {'nickname': nickname, 'command': const.NICK_FAIL_CMD, 'channel': '', 'message': 'Nickname ' + nickname+  ' is taken.'}
+            break
         else:
             sockets[socket_id]['nickname'] = nickname
 
-            message = {'nickname': nickname, 'command': const.NICK_SET_CMD, 'message': 'Nickname set in server as ' + nickname}
+            message = {'nickname': nickname, 'command': const.NICK_SET_CMD, 'channel': '', 'message': 'Nickname set in server as ' + nickname}
 
     message_queues[socket_id].put(message)
     return sockets
