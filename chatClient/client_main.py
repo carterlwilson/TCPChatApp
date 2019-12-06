@@ -11,7 +11,7 @@ except ImportError:
 
 class ClientInfo:
 
-    def __int__(self):
+    def __init__(self):
         self.nickname = ''
         self.rooms = ['home']
 
@@ -56,7 +56,6 @@ class MenuClass:
             # if message['command'] == const.LEAVE_ROOM_CMD:
             #     if message['room'] in self.rooms:
             #         clientInfo.remove_room(message['room'])
-        return clientInfo
 
     def parse_menu_choice(self, user_input, outbound_message_queue, nickname, event_queue):
         input_array = user_input.split('/', 2)
@@ -91,6 +90,9 @@ class MenuClass:
         elif input_array[0] == 'connect':
             event_queue.put(user_input)
 
+        elif input_array[0] == 'nick':
+            utils.send_nick(input_array[1], outbound_message_queue)
+
         else:
             print('invalid command')
 
@@ -109,7 +111,7 @@ class MenuClass:
             menu_choice = input()
             # This is used to change variables in this thread **IT DOES NOT PRINT MSGS FROM SERVER***,
             # it is a workaround for sharing variables between the two threads like nickname and rooms
-            clientInfo = self.parse_inbound_messages(inbound_message_queue, clientInfo)
+            self.parse_inbound_messages(inbound_message_queue, clientInfo)
             self.parse_menu_choice(menu_choice, outbound_message_queue, clientInfo.get_nickname(), event_queue)
 
 
