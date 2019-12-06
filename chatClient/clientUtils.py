@@ -14,9 +14,9 @@ def send_direct_message(nickname, destination_user, message, outbound_message_qu
     outbound_message_queue.put(message)
 
 
-def send_nick(data, message_queue):
+def send_nick(data, outbound_message_queue):
     message = {'nickname': data, 'command': const.NICK_CMD, 'channel': '', 'message': ''}
-    message_queue.put(message)
+    outbound_message_queue.put(message)
 
 
 def list_rooms(nickname, outbound_message_queue):

@@ -119,6 +119,7 @@ def set_nickname(socket, request, sockets, message_queues):
             sockets[socket_id]['nickname'] = nickname
 
             message = {'nickname': nickname, 'command': const.NICK_SET_CMD, 'channel': '', 'message': 'Nickname set in server as ' + nickname}
+            break
 
     message_queues[socket_id].put(message)
     return sockets
