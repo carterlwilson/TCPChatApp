@@ -18,7 +18,7 @@ class chatClient:
         self.events = queue.Queue()
         self.sock = None
         self.rooms = []
-        self.nickname = 'carter'
+        self.nickname = 'default'
 
     def connect_server(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

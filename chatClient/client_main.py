@@ -129,6 +129,7 @@ def main():
     thread_client.start()
 
     x = True
+    #Event loop to check for attempts to re-connect to server
     while x:
         if not event_queue.empty():
             event = event_queue.get()
