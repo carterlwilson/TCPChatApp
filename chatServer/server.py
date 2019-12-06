@@ -135,7 +135,7 @@ try:
 
 except KeyboardInterrupt:
     for key, socket in sockets.items():
-        close_connection(socket, sockets, messageQueues, inputs, outputs)
+        close_connection(socket, messageQueues, inputs, outputs)
     
     sockets.clear()
     print("Disconnected from all clients, shutting down server.")
