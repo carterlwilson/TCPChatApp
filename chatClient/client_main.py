@@ -50,15 +50,8 @@ class MenuClass:
         while not inbound_message_queue.empty():
             message = inbound_message_queue.get()
 
-            #if message['command'] == const.JOIN_SUCCESS_CMD:
-                #clientInfo.add_room(message['channel'])
-
             if message['command'] == const.NICK_SET_CMD:
                 clientInfo.set_nickname(message['nickname'])
-
-            # if message['command'] == const.LEAVE_ROOM_CMD:
-            #     if message['room'] in self.rooms:
-            #         clientInfo.remove_room(message['room'])
 
     def parse_menu_choice(self, user_input, outbound_message_queue, nickname, event_queue):
         input_array = user_input.split('/', 2)
@@ -98,8 +91,6 @@ class MenuClass:
 
         else:
             print('invalid command')
-
-        #return self
 
     def menu_action(self, outbound_message_queue, inbound_message_queue, event_queue):
         x = True
