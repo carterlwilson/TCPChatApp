@@ -2,11 +2,13 @@ import socket
 import sys
 import pickle
 import select
-import queue
 import clientUtils as utils
 import client_const as const
 import json
-
+try:
+   import queue
+except ImportError:
+   import Queue as queue
 
 class chatClient:
 

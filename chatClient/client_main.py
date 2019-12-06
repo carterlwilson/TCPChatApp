@@ -1,9 +1,12 @@
 import threading
 import sys
 import client
-import queue
 import clientUtils as utils
 import client_const as const
+try:
+   import queue
+except ImportError:
+   import Queue as queue
 
 class ClientInfo:
 
@@ -107,8 +110,8 @@ class MenuClass:
 
 
 def main():
-    #host = 'localhost'
-    host = '34.70.217.186'  #ip address for cloud hosted server
+    host = 'localhost'
+    #host = '34.70.217.186'  #ip address for cloud hosted server
     port = 1025
     outbound_message_queue = queue.Queue()
     inbound_message_queue = queue.Queue()

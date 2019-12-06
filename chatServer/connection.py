@@ -140,3 +140,11 @@ def send_direct_message(request, sockets, s, message_queues, outputs):
 def say_thanks(request, s, message_queues):
     message = 'Thanks for chatting ' + request['nickname'] + '!'
     message_queues[s.fileno()].put(buildMessage(const.CLOSE_CONN_CMD, request['nickname'], 'n/a/', message))
+
+def close_connection(socket, message_queues, inputs, outputs):
+    message_queues.pop(socket.fileno())
+    if socket in inputs:
+        inputs.remove(socket)
+    if socket in outputs:
+        outputs.remove(socket)
+    socket.close()
