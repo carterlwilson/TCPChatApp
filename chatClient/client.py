@@ -38,14 +38,14 @@ class chatClient:
             messageQueue.put(message)
 
     def send_nick(self, data, messageQueue):
-        message = {'nickname': data, 'command': const.NICK_CMD, 'channel': self.channel}
+        message = {'nickname': data, 'command': const.NICK_CMD, 'channel': self.rooms}
         messageQueue.put(message)
         # try:
         #     self.sock.send(pickle.dumps(message))
         # except:
         #     print('could not send nick message')
 
-    def run_client(self, outboundMessageQueue, inboundMessageQueue):
+    def run_client(self, outboundMessageQueue, inboundMessageQueue, eventMessageQueue):
 
         try:
             self.connect_server()
@@ -63,6 +63,7 @@ class chatClient:
             self.sock.settimeout(1)
 
         while inputs:
+            #check for any events from the other thread
             readable, writable, exceptional = select.select(inputs, outputs, [])
 
             if self.sock in readable:

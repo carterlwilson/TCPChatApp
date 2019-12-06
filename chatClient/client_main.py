@@ -3,6 +3,7 @@ import sys
 import client
 import clientUtils as utils
 import client_const as const
+import os
 try:
    import queue
 except ImportError:
@@ -57,11 +58,11 @@ class MenuClass:
             #         clientInfo.remove_room(message['room'])
         return clientInfo
 
-    def parse_menu_choice(self, user_input, outbound_message_queue, nickname):
+    def parse_menu_choice(self, user_input, outbound_message_queue, nickname, event_queue):
         input_array = user_input.split('/', 2)
 
         if input_array[0] == 'quit':
-            sys.exit()
+            os._exit(1)
 
         elif input_array[0] == 'broadcast':
             utils.broadcast_message(nickname, input_array[1], input_array[2], outbound_message_queue)
@@ -87,12 +88,15 @@ class MenuClass:
         elif input_array[0] == 'close':
             utils.close_connection(nickname, outbound_message_queue)
 
+        elif input_array[0] == 'connect':
+            event_queue.put(user_input)
+
         else:
             print('invalid command')
 
         #return self
 
-    def menu_action(self, outbound_message_queue, inbound_message_queue):
+    def menu_action(self, outbound_message_queue, inbound_message_queue, event_queue):
         x = True
         clientInfo = ClientInfo()
 
@@ -106,25 +110,39 @@ class MenuClass:
             # This is used to change variables in this thread **IT DOES NOT PRINT MSGS FROM SERVER***,
             # it is a workaround for sharing variables between the two threads like nickname and rooms
             clientInfo = self.parse_inbound_messages(inbound_message_queue, clientInfo)
-            self.parse_menu_choice(menu_choice, outbound_message_queue, clientInfo.get_nickname())
+            self.parse_menu_choice(menu_choice, outbound_message_queue, clientInfo.get_nickname(), event_queue)
 
 
 def main():
     #host = 'localhost'
-    host = '34.70.217.186'  #ip address for cloud hosted server
+    host = '35.225.202.2'  #ip address for cloud hosted server
     port = 1025
     outbound_message_queue = queue.Queue()
     inbound_message_queue = queue.Queue()
+    event_queue = queue.Queue()
 
-    menu = MenuClass()
     current_client = client.chatClient(host, port)
+    menu = MenuClass()
 
-    thread_ui = threading.Thread(target=menu.menu_action, args=(outbound_message_queue, inbound_message_queue))
+
+    thread_ui = threading.Thread(target=menu.menu_action, args=(outbound_message_queue, inbound_message_queue, event_queue))
     thread_ui.start()
 
     thread_client = threading.Thread(target=current_client.run_client, args=(outbound_message_queue,
-                                                                             inbound_message_queue))
+                                                                             inbound_message_queue, event_queue))
     thread_client.start()
+
+    x = True
+    while x:
+        if not event_queue.empty():
+            event = event_queue.get()
+            event_array = event.split('/',1)
+            if event_array[0] == "connect":
+                thread_client = threading.Thread(target=current_client.run_client, args=(outbound_message_queue,
+                                                                             inbound_message_queue, event_queue))
+                thread_client.start()
+                nickname_choice = event_array[1]
+                utils.send_nick(nickname_choice, outbound_message_queue)
 
 
 if __name__ == "__main__":
