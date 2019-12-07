@@ -38,6 +38,7 @@ def close_connection(nickname, outbound_message_queue):
     message = build_message(const.CLOSE_CONN_CMD, nickname, '', '')
     outbound_message_queue.put(message)
 
+#add nickname and channel to message
 def format_message(message):
     if message['nickname']:
         message['message'] = message['nickname'] + ': ' + message['message']

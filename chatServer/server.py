@@ -30,7 +30,7 @@ try:
         readable, writable, exceptional = select.select(inputs, outputs, inputs)
 
         for s in readable:
-
+            #if s is server, create new socket
             if s is server:
                 newConnection, client_address = s.accept()
                 if newConnection:
@@ -46,7 +46,6 @@ try:
                     print('connected to client')
 
             else:
-                #handles client crash
                 try:
                     data = s.recv(1024)
                 except socket.error:
@@ -65,6 +64,7 @@ try:
                     s.close()
                     break
                 if data:
+                    #read inbound message
                     request = pickle.loads(data)
                     print('received message\n')
                     if request['command'] == const.NICK_CMD:

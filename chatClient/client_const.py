@@ -1,4 +1,4 @@
-
+#string constants for client
 NICK_CMD = "/nick"
 BROADCAST_CMD = "/broadcast"
 JOIN_CMD = "/join"

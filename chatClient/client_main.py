@@ -9,6 +9,7 @@ try:
 except ImportError:
    import Queue as queue
 
+#class to hold client nickname and rooms list
 class ClientInfo:
 
     def __init__(self):
@@ -92,6 +93,7 @@ class MenuClass:
         else:
             print('invalid command')
 
+    #runs a loop to get user input
     def menu_action(self, outbound_message_queue, inbound_message_queue, event_queue):
         x = True
         clientInfo = ClientInfo()
@@ -120,10 +122,11 @@ def main():
     current_client = client.chatClient(host, port)
     menu = MenuClass()
 
-
+    #thread for reading from and writing to sockets
     thread_ui = threading.Thread(target=menu.menu_action, args=(outbound_message_queue, inbound_message_queue, event_queue))
     thread_ui.start()
 
+    #thread for getting user input
     thread_client = threading.Thread(target=current_client.run_client, args=(outbound_message_queue,
                                                                              inbound_message_queue, event_queue))
     thread_client.start()
